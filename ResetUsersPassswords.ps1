@@ -45,14 +45,23 @@ Function Reset-ADUserPassword
 
 #get list of users, we will need to enter the password.
 $users = get-content .\users.txt 
-$password = ""
+$passwordCandidate = "Iwuoma9amIwuoma9am"
 
 #for loop will go through each user and reset their password
-foreach ($u in $users) {
-    try {
-    Reset-ADUserPassword -userID $u -password $password
-    }
-    catch {
-        Write-Error -Message
-    }
+
+if($passwordCandidate){
+	foreach ($u in $users) {
+		write-host "Changing password for $u"
+    		try {
+   		 Reset-ADUserPassword -userID $u -password $passwordCandidate
+		 write-host "User $u's password has been changed!" -ForegroundColor Green
+   		}
+    		catch {
+       		 Write-Error -Message "User $u does not exist"
+    		}
+	}
+}
+
+else {
+	write-host "password is not entered!" -BackgroundColor Black -ForegroundColor Red
 }
